@@ -1,0 +1,40 @@
+C:\Users\demo\Desktop\fingerprint Project\test1\zkfpPrototype\bin\Debug\zkfpPrototype.exe.config
+C:\Users\demo\Desktop\fingerprint Project\test1\zkfpPrototype\bin\Debug\zkfpPrototype.exe
+C:\Users\demo\Desktop\fingerprint Project\test1\zkfpPrototype\bin\Debug\zkfpPrototype.pdb
+C:\Users\demo\Desktop\fingerprint Project\test1\zkfpPrototype\bin\Debug\libzkfpcsharp.dll
+C:\Users\demo\Desktop\fingerprint Project\test1\zkfpPrototype\bin\Debug\System.Data.SqlClient.dll
+C:\Users\demo\Desktop\fingerprint Project\test1\zkfpPrototype\bin\Debug\System.Data.SqlClient.xml
+C:\Users\demo\Desktop\fingerprint Project\test1\zkfpPrototype\obj\Debug\zkfpPrototype.csproj.AssemblyReference.cache
+C:\Users\demo\Desktop\fingerprint Project\test1\zkfpPrototype\obj\Debug\zkfpPrototype.csproj.SuggestedBindingRedirects.cache
+C:\Users\demo\Desktop\fingerprint Project\test1\zkfpPrototype\obj\Debug\Interop.zkemkeeper.dll
+C:\Users\demo\Desktop\fingerprint Project\test1\zkfpPrototype\obj\Debug\zkfpPrototype.csproj.ResolveComReference.cache
+C:\Users\demo\Desktop\fingerprint Project\test1\zkfpPrototype\obj\Debug\zkfpPrototype.Form1.resources
+C:\Users\demo\Desktop\fingerprint Project\test1\zkfpPrototype\obj\Debug\zkfpPrototype.Properties.Resources.resources
+C:\Users\demo\Desktop\fingerprint Project\test1\zkfpPrototype\obj\Debug\zkfpPrototype.csproj.GenerateResource.cache
+C:\Users\demo\Desktop\fingerprint Project\test1\zkfpPrototype\obj\Debug\zkfpPrototype.csproj.CoreCompileInputs.cache
+C:\Users\demo\Desktop\fingerprint Project\test1\zkfpPrototype\obj\Debug\zkfpPrototype.csproj.CopyComplete
+C:\Users\demo\Desktop\fingerprint Project\test1\zkfpPrototype\obj\Debug\zkfpPrototype.exe
+C:\Users\demo\Desktop\fingerprint Project\test1\zkfpPrototype\obj\Debug\zkfpPrototype.pdb
+C:\Users\demo\Desktop\fingerprint Project\test1\zkfpPrototype\obj\Debug\zkfpPrototype.Form3.resources
+C:\Users\demo\Desktop\fingerprint Project\test1\zkfpPrototype\bin\Debug\Database1.mdf
+C:\Users\demo\Desktop\fingerprint Project\test1\zkfpPrototype\bin\Debug\Database1_log.ldf
+C:\Users\demo\Desktop\fingerprint_project\test1\zkfpPrototype\bin\Debug\Database1.mdf
+C:\Users\demo\Desktop\fingerprint_project\test1\zkfpPrototype\bin\Debug\Database1_log.ldf
+C:\Users\demo\Desktop\fingerprint_project\test1\zkfpPrototype\bin\Debug\zkfpPrototype.exe.config
+C:\Users\demo\Desktop\fingerprint_project\test1\zkfpPrototype\bin\Debug\zkfpPrototype.exe
+C:\Users\demo\Desktop\fingerprint_project\test1\zkfpPrototype\bin\Debug\zkfpPrototype.pdb
+C:\Users\demo\Desktop\fingerprint_project\test1\zkfpPrototype\bin\Debug\System.Data.SqlClient.dll
+C:\Users\demo\Desktop\fingerprint_project\test1\zkfpPrototype\bin\Debug\System.Data.SqlClient.xml
+C:\Users\demo\Desktop\fingerprint_project\test1\zkfpPrototype\obj\Debug\zkfpPrototype.csproj.AssemblyReference.cache
+C:\Users\demo\Desktop\fingerprint_project\test1\zkfpPrototype\obj\Debug\zkfpPrototype.csproj.SuggestedBindingRedirects.cache
+C:\Users\demo\Desktop\fingerprint_project\test1\zkfpPrototype\obj\Debug\zkfpPrototype.Form1.resources
+C:\Users\demo\Desktop\fingerprint_project\test1\zkfpPrototype\obj\Debug\zkfpPrototype.Form3.resources
+C:\Users\demo\Desktop\fingerprint_project\test1\zkfpPrototype\obj\Debug\zkfpPrototype.Properties.Resources.resources
+C:\Users\demo\Desktop\fingerprint_project\test1\zkfpPrototype\obj\Debug\zkfpPrototype.csproj.GenerateResource.cache
+C:\Users\demo\Desktop\fingerprint_project\test1\zkfpPrototype\obj\Debug\zkfpPrototype.csproj.CoreCompileInputs.cache
+C:\Users\demo\Desktop\fingerprint_project\test1\zkfpPrototype\obj\Debug\zkfpPrototype.csproj.CopyComplete
+C:\Users\demo\Desktop\fingerprint_project\test1\zkfpPrototype\obj\Debug\zkfpPrototype.exe
+C:\Users\demo\Desktop\fingerprint_project\test1\zkfpPrototype\obj\Debug\zkfpPrototype.pdb
+C:\Users\demo\Desktop\fingerprint_project\test1\zkfpPrototype\obj\Debug\Interop.zkemkeeper.dll
+C:\Users\demo\Desktop\fingerprint_project\test1\zkfpPrototype\obj\Debug\zkfpPrototype.csproj.ResolveComReference.cache
+C:\Users\demo\Desktop\fingerprint_project\test1\zkfpPrototype\bin\Debug\libzkfpcsharp.dll
