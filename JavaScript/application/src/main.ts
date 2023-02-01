@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
@@ -8,6 +9,7 @@ async function bootstrap() {
 
   console.log('Server alive at http:/localhost:' + port);
   console.log('Server alive at http:/localhost:' + port + '/fingerprint');
+  console.log('Server alive at http:/localhost:' + port + '/comparefingerprint');
   await app.listen(port);
 }
 bootstrap();
