@@ -1,10 +1,12 @@
-import { All, Controller, Get, Req, Post, Res, StreamableFile } from "@nestjs/common";
+import { All, Controller, Get, Req, Post, Res, StreamableFile, Param } from "@nestjs/common";
 import { FingerPrintService } from "./app.service";
 import { Request } from "express";
 import { Body } from "@nestjs/common/decorators";
 import { GetFpFunction } from "./fp.dto";
+import { GetJsonFunction } from "./app.dto";
 import { createReadStream } from 'fs';
 import { join } from 'path';
+import { Stream } from "stream";
 const fs = require("fs");
 @Controller()
 export class AppController {
@@ -16,36 +18,37 @@ export class AppController {
   }
 
   // retrieve json data from file
-  @All('retrieve')
-  getFile(@Res({ passthrough: true }) res: Response): StreamableFile {
+  @All('getfp')
+  getfp(@Res({ passthrough: true }) res: Response): StreamableFile {
     const file = createReadStream(join(process.cwd(), 'fpTemplate.json'));
-    console.log('Return data');
     return new StreamableFile(file);
+    // return this.appService.getfp(res);
   }
 
-  @Post("savefp")
-  getFingerPrintFunction(
-    @Req() request: Request,
-    @Body() fp: GetFpFunction
-  ): any {
-    fs.writeFile("fp.json", JSON.stringify(fp), (err) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(fp);
-        console.log("File saved");
-      }
-    });
-    return this.appService.getFingerPrintFunction(request, fp);
+
+  @All("savefp")
+  savefp(@Body() fp: GetFpFunction): any {
+    return this.appService.savefp(fp);
+    // fs.writeFile("fpTemplate.json", JSON.stringify(fp), (err) => {
+    //   if (err) {
+    //     console.log(err);
+    //   } else {
+    //     const fpLength = JSON.stringify(fp);
+    //     if (fpLength.length != 2) {
+    //       return this.appService.getFingerPrintFunction(fpLength.length);
+    //     }
+    //     else {
+    //       console.log('length: ', fpLength.length, 'Content:', fp);
+    //       console.log("File saved");
+    //       return this.appService.getFingerPrintFunction(fpLength.length);
+    //     }
+    //   }
+    // });
   }
 
-  @Get()
-  getJsonFunction(): any {
-    return this.appService.getJsonFunction();
+  @All("records")
+  saveRecord(@Body() record: GetJsonFunction): any {
+    return this.appService.saveRecord(record);
   }
 
-  @All("comparefingerprint")
-  getCompareFingerPrintFunction(@Req() request: Request): string {
-    return this.appService.getCompareFingerPrintFunction(request);
-  }
 }
