@@ -12,30 +12,43 @@ const fsp = require('fs/promises');
 const WebSocket = require('ws');
 const io = require('socket.io-client');
 import * as net from 'net';
-
+import { v4 as uuidv4 } from 'uuid';
 @Injectable()
 export class FingerPrintService {
   private socket: net.Socket;
   constructor() {
-    console.log('FingerPrint Service.');
+    console.log('FingerPrint Service start.');
 
     this.socket = new net.Socket();
-    this.socket.connect(3000, '192.168.200.2', () => {
+    this.socket.connect(8080, '192.168.200.2', () => {
       console.log('Connected to Java server');
-      const file = fsp.readFile("fpTemplate.json", 'utf-8');
-      this.socket.write("message from client", file);
-    });
+      //const file = fsp.readFile("fpTemplate.json", 'utf-8');
+     // const file = createReadStream(join(process.cwd(), 'fpTemplate.json'));
+      fs.readFile('fpTemplate.json', (err, data) => {
+	if(err){
+	   console.log(err);
+	} else{
+	//console.log(data.toString());
+	const jsonString = JSON.stringify(data);
+      const encoded = new TextEncoder().encode(jsonString);
+      const uint8Array = new Uint8Array(encoded);
+      this.socket.write(data.toString());}
+      })
+
+         });
     this.socket.on('data', (data) => {
-      console.log(`Received from Java server: ${data.toString()}`);
+      console.log(`Message from Java server: ${data.toString().slice(2)}`);
+      const jsonfp = JSON.parse(data.toString().slice(2));
+      //jsonfp['Register'].push({ "name": "newuser", "time": "2023-01-31 02:40:46", "fingerprintTemplate": "strBase64" });
+
+      //fsp.writeFile("fp.json", JSON.stringify(jsonfp));
+      console.log('Nestjs: Save success');
     });
     this.socket.on('end', () => {
       console.log('disconnected from server')
     })
 
-
-
   }
-
 
   fingerprint = [
     {
@@ -43,10 +56,6 @@ export class FingerPrintService {
       fingerprintTemplate: 'test',
     }
   ]
-
-
-
-
 
   getHello(): string {
     return 'Test';
@@ -61,7 +70,6 @@ export class FingerPrintService {
     return file;
 
   }
-
 
   savefp(fpLength: GetFpFunction): string {
     // fsp.writeFile("fpTemplate.json", JSON.stringify(fpLength));
