@@ -47,7 +47,7 @@ export class AppController {
 
 
   @Get('status')
-  getStatus(@Req() req: Request, @Res() res): string {
+  getStatus(@Req() req, @Res() res): string {
     const jadeargument: any = {};
     // let fptemp = fpdata['Register'][0].fingerprintTemplate;
     // console.log(JSON.stringify(fptemp));
@@ -62,7 +62,7 @@ export class AppController {
   @Post('status')
   postStatus(@Req() req: Request, @Res() res): string {
     const jadeargument: any = {};
-    console.log(JSON.stringify(req.body, null, 2));
+    console.log("Message from java server: ", JSON.stringify(req.body, null, 2));
     let data = fs.readFileSync('fpTemplate.json', {
       encoding: 'utf8',
     });
