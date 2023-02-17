@@ -1,0 +1,46 @@
+doctype html
+html
+    head
+        title Leave Status
+        style.
+           table{
+                border-collapse: collapse;
+                width: 1000px;
+            }
+            th,td{
+                text-align: left;
+                padding: 8px;
+                
+            }
+            tr:nth-child(even) {
+                background-color:#D6EEEE;
+            }
+            thead { background-color:lightblue; }
+
+    body
+        H1(style="text-align:left")  Fingerprint Data  
+
+        table(border="1") 
+            thead 
+                tr 
+                    th(style="text-align:left") No 
+                    th User name
+                    th Time
+                    th Fingerprint data
+            each value, index in jadeargument["dataSet1"]
+                tr 
+                    td=index + 1
+                    td=jadeargument["dataSet1"][index]["name"]
+                    td=jadeargument["dataSet1"][index]["time"]
+                    td(style="word-break: break-all")=jadeargument["dataSet1"][index]["fingerprintTemplate"].slice(0 , 40) + "..."
+        br
+        
+        form(method='post', style='margin-bottom:5px')
+            input(type='submit',value='Check1', style='padding: 8px 20px;width: 225px;font-size:14px;border-radius:6px;background: #DCDCDC')
+            input(type='hidden',name='submitValue', value='submitValueA')
+        
+        form(method='post', style='margin-bottom:5px')
+            input(type='submit', value='Check2', style='padding: 8px 20px;width:225px;font-size:14px;border-radius:6px;background: #DCDCDC')
+            input(type='hidden', name='submitValue', value='submitValueB')
+        
+    
