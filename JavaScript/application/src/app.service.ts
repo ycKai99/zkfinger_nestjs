@@ -7,7 +7,7 @@ import { GetFpFunction } from './fp.dto';
 import { createReadStream } from 'fs';
 import { join } from 'path';
 import { Socket, Manager } from 'socket.io-client';
-const fs = require("fs");
+const fs = require("graceful-fs");
 const fsp = require('fs/promises');
 const WebSocket = require('ws');
 const io = require('socket.io-client');
@@ -34,15 +34,22 @@ export class FingerPrintService {
       const uint8Array = new Uint8Array(encoded);
       this.socket.write(data.toString());}
       })
-
-         });
+    });
     this.socket.on('data', (data) => {
-      console.log(`Message from Java server: ${data.toString().slice(2)}`);
+      console.log(`Message from Java server: ${data.toString().slice(2, 130) + "..."}`);
       const jsonfp = JSON.parse(data.toString().slice(2));
-      //jsonfp['Register'].push({ "name": "newuser", "time": "2023-01-31 02:40:46", "fingerprintTemplate": "strBase64" });
-
-      //fsp.writeFile("fp.json", JSON.stringify(jsonfp));
-      console.log('Nestjs: Save success');
+      const fpData = fsp.readFile("fp.json", 'utf-8');
+      if(fpData.toString() != null){
+	jsonfp['Register'].push(data.toString().slice(2));
+	fsp.writeFile("fp.json", JSON.stringify(jsonfp));
+	console.log('Nestjs: Save success');
+     }
+      else{
+	jsonfp['Register'].push({ "name": "newuser", "time": "2023-01-31 02:40:46", "fingerprintTemplate": "strBase64" });
+	fsp.writeFile("fp.json", JSON.stringify(jsonfp));
+        console.log("Nestjs: Register success");
+      }
+      //console.log(uuidv4());
     });
     this.socket.on('end', () => {
       console.log('disconnected from server')
