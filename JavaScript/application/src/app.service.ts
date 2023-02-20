@@ -35,11 +35,11 @@ export class FingerPrintService {
       if (filedata.length != 0) {
         let fpdata = JSON.parse(filedata.toString());
         let serverDataObj = JSON.parse(serverdata.toString().slice(2));
-        let newdata = JSON.stringify(serverDataObj);
+        let newdata = JSON.stringify(serverDataObj['Register']);
         let newdatajson = JSON.parse(newdata);
         fpdata['Register'].push(newdatajson[0]);
         console.log("after push: ", fpdata);
-        fsp.write("fpTemplate.json", JSON.stringify(fpdata));
+        fsp.writeFile("fpTemplate.json", JSON.stringify(fpdata));
         console.log('save success');
       }
       else {
