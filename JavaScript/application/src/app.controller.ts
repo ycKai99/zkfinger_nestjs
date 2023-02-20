@@ -49,7 +49,6 @@ export class AppController {
   @Get('status')
   getStatus(@Req() req, @Res() res): string {
     const jadeargument: any = {};
-    // let fptemp = fpdata['Register'][0].fingerprintTemplate;
     // console.log(JSON.stringify(fptemp));
     let data = fs.readFileSync('fpTemplate.json', {
       encoding: 'utf8',
@@ -95,7 +94,6 @@ export function res_render(jadefile: any, res: any, jadeargument: any) {
 
   // Render the function
   let html = renderer({ jadeargument });
-  //console.log('html:'+html)
 
   return html;
 }

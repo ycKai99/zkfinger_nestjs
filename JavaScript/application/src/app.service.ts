@@ -9,7 +9,6 @@ import { join } from 'path';
 import { Socket, Manager } from 'socket.io-client';
 const fs = require("graceful-fs");
 const fsp = require('fs/promises');
-const WebSocket = require('ws');
 const io = require('socket.io-client');
 import * as net from 'net';
 
@@ -19,19 +18,38 @@ export class FingerPrintService {
   constructor() {
     console.log('FingerPrint Service.');
 
-    // this.socket = new net.Socket();
-    // this.socket.connect(8080, '10.0.2.2', () => {
-    //   console.log('Connected to Java server');
-    //   //const file = fsp.readFile("fpTemplate.json", 'utf-8');
-    //   //console.log(file);
-    //   this.socket.write("message from client");
-    // });
-    // this.socket.on('data', (data) => {
-    //   console.log(`Received from Java server: ${data.toString()}`);
-    // });
-    // this.socket.on('end', () => {
-    //   console.log('disconnected from server')
-    // })
+    this.socket = new net.Socket();
+    this.socket.connect(8080, '127.0.0.1', () => {
+      console.log('Connected to Java server');
+      const file = fsp.readFile("fpTemplate.json", 'utf-8');
+      //console.log(file);
+      this.socket.write(file.toString());
+    });
+    this.socket.on('data', (serverdata) => {
+      console.log(`Message from Java server: ${serverdata.toString()}`);
+      let jsonfp = JSON.parse(serverdata.toString().slice(2));
+      let filedata = fs.readFileSync('fpTemplate.json', {
+        encoding: 'utf8',
+      });
+
+      if (filedata.length != 0) {
+        let fpdata = JSON.parse(filedata.toString());
+        let serverDataObj = JSON.parse(serverdata.toString().slice(2));
+        let newdata = JSON.stringify(serverDataObj);
+        let newdatajson = JSON.parse(newdata);
+        fpdata['Register'].push(newdatajson[0]);
+        console.log("after push: ", fpdata);
+        fsp.write("fpTemplate.json", JSON.stringify(fpdata));
+        console.log('save success');
+      }
+      else {
+        fsp.writeFile("fpTemplate.json", serverdata.toString());
+        console.log('save success');
+      }
+    });
+    this.socket.on('end', () => {
+      console.log('disconnected from server')
+    })
 
   }
 
