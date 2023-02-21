@@ -19,7 +19,7 @@ export class FingerPrintService {
     console.log('FingerPrint Service.');
 
     this.socket = new net.Socket();
-    this.socket.connect(8080, '127.0.0.1', () => {
+    this.socket.connect(8080, 'localhost', () => {
       console.log('Connected to Java server');
       // const file = fsp.readFile("fpTemplate.json", 'utf-8');
       let file = fs.readFileSync('fpTemplate.json', {
@@ -29,26 +29,32 @@ export class FingerPrintService {
       this.socket.write(file.toString());
     });
     this.socket.on('data', (serverdata) => {
-      console.log(`Message from Java server: ${serverdata.toString()}`);
-      let jsonfp = JSON.parse(serverdata.toString().slice(2));
+      console.log(`Message from Java server: ${serverdata.toString().slice(2)}`);
       let filedata = fs.readFileSync('fpTemplate.json', {
         encoding: 'utf8',
       });
-
-      if (filedata.length != 0) {
-        let fpdata = JSON.parse(filedata.toString());
-        let serverDataObj = JSON.parse(serverdata.toString().slice(2));
-        let newdata = JSON.stringify(serverDataObj['Register']);
-        let newdatajson = JSON.parse(newdata);
-        fpdata['Register'].push(newdatajson[0]);
-        console.log("after push: ", fpdata);
-        fsp.writeFile("fpTemplate.json", JSON.stringify(fpdata));
-        console.log('save success');
+      if (serverdata.toString().includes("Register")) {
+        if (filedata.length != 0) {
+          let fpdata = JSON.parse(filedata.toString());
+          let serverDataObj = JSON.parse(serverdata.toString().slice(2));
+          let newdata = JSON.stringify(serverDataObj['Register']);
+          let newdatajson = JSON.parse(newdata);
+          fpdata['Register'].push(newdatajson[0]);
+          console.log("after push: ", fpdata);
+          fsp.writeFile("fpTemplate.json", JSON.stringify(fpdata));
+          console.log('save success');
+        }
+        else {
+          fsp.writeFile("fpTemplate.json", serverdata.toString());
+          console.log('save success');
+        }
       }
       else {
-        fsp.writeFile("fpTemplate.json", serverdata.toString());
-        console.log('save success');
+        console.log('Message from Java server: ', JSON.parse(serverdata.toString().slice(2)));
       }
+
+
+
     });
     this.socket.on('end', () => {
       console.log('disconnected from server')

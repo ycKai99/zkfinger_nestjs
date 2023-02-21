@@ -39,12 +39,12 @@ html
                     td(style="word-break: break-all")=jadeargument["dataSet1"][index]["fingerprintTemplate"].slice(0 , 40) + "..."
         br
         
-        form(method='post', style='margin-bottom:5px')
+        form(method='get', style='margin-bottom:5px')
             input(type='submit',value='Check1', style='padding: 8px 20px;width: 225px;font-size:14px;border-radius:6px;background: #DCDCDC')
-            input(type='hidden',name='submitValue', value='submitValueA')
+            input(type='hidden',name='fingerprintTemplate', value='submitValueA')
         
         form(method='post', style='margin-bottom:5px')
             input(type='submit', value='Check2', style='padding: 8px 20px;width:225px;font-size:14px;border-radius:6px;background: #DCDCDC')
-            input(type='hidden', name='submitValue', value='submitValueB')
+            input(type='hidden', name='fingerprintTemplate', value='submitValueB')
         
     
