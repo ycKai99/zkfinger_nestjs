@@ -25,8 +25,15 @@ export class FingerPrintService {
       let file = fs.readFileSync('fpTemplate.json', {
         encoding: 'utf8',
       });
-      console.log(JSON.parse(file));
-      this.socket.write(file.toString());
+      if (file.length != 0) {
+        console.log(JSON.parse(file));
+        this.socket.write(file.toString());
+      }
+      else {
+        console.log("File is empty");
+        this.socket.write(file.toString());
+      }
+
     });
     this.socket.on('data', (serverdata) => {
       console.log(`Message from Java server: ${serverdata.toString().slice(2)}`);
