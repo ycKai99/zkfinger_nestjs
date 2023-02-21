@@ -21,8 +21,11 @@ export class FingerPrintService {
     this.socket = new net.Socket();
     this.socket.connect(8080, '127.0.0.1', () => {
       console.log('Connected to Java server');
-      const file = fsp.readFile("fpTemplate.json", 'utf-8');
-      //console.log(file);
+      // const file = fsp.readFile("fpTemplate.json", 'utf-8');
+      let file = fs.readFileSync('fpTemplate.json', {
+        encoding: 'utf8',
+      });
+      console.log(JSON.parse(file));
       this.socket.write(file.toString());
     });
     this.socket.on('data', (serverdata) => {
