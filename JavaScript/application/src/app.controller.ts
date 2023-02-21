@@ -67,20 +67,20 @@ export class AppController {
     });
     let fpdata = JSON.parse(data);
     jadeargument['dataSet1'] = fpdata['Register'];
-    // let newdata = JSON.stringify(req.body, null, 2);
-    // let newdatajson = JSON.parse(newdata);
+    let newdata = JSON.stringify(req.body, null, 2);
+    let newdatajson = JSON.parse(newdata);
 
-    // //Push the new data to the json object
-    // for (let i = 0; i < fpdata['Register'].length; i++) {
-    //   let fpDataString = JSON.stringify(fpdata['Register'][i]);
-    //   let fpDataJson = JSON.parse(fpDataString);
-    //   newdatajson['Register'].push(fpDataJson);
+    //Push the new data to the json object
+    for (let i = 0; i < fpdata['Register'].length; i++) {
+      let fpDataString = JSON.stringify(fpdata['Register'][i]);
+      let fpDataJson = JSON.parse(fpDataString);
+      newdatajson['Register'].push(fpDataJson);
 
-    // }
-    // fs.writeFileSync("fpTemplate.json", JSON.stringify(newdatajson));
-    // //console.log(JSON.stringify(req.body, null, 2));
-    // console.log("Save success");
-    // jadeargument['dataSet1'] = newdatajson['Register'];
+    }
+    fs.writeFileSync("fpTemplate.json", JSON.stringify(newdatajson));
+    //console.log(JSON.stringify(req.body, null, 2));
+    console.log("Save success");
+    jadeargument['dataSet1'] = newdatajson['Register'];
     return res.send(res_render('fp', res, jadeargument));
   }
 }
