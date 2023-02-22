@@ -19,26 +19,26 @@ export class FingerPrintService {
     console.log('FingerPrint Service.');
     const RETRY_INTERVAL = 5000;
 
-    this.socket = new net.Socket();
+    let socket = new net.Socket();
+    setTimeout(connect, 1000);
     function connect() {
-      this.socket.connect(8080, 'localhost', () => {
+      socket.connect(8080, 'localhost', () => {
         console.log('Connected to Java server');
-        // const file = fsp.readFile("fpTemplate.json", 'utf-8');
         let file = fs.readFileSync('fpTemplate.json', {
           encoding: 'utf8',
         });
         if (file.length != 0) {
           console.log(JSON.parse(file));
-          this.socket.write(file.toString());
+          socket.write(file.toString());
         }
         else {
           console.log("File is empty");
-          this.socket.write(file.toString());
+          socket.write(file.toString());
         }
       });
     }
 
-    this.socket.on('data', (serverdata) => {
+    socket.on('data', (serverdata) => {
       console.log(`Message from Java server: ${serverdata.toString().slice(2)}`);
       let filedata = fs.readFileSync('fpTemplate.json', {
         encoding: 'utf8',
@@ -65,12 +65,12 @@ export class FingerPrintService {
       }
     });
 
-    this.socket.on('error', (err) => {
+    socket.on('error', (err) => {
       console.error(`Socket error: ${err.message}`);
-      // setTimeout(connect, RETRY_INTERVAL);
+      setTimeout(connect, RETRY_INTERVAL);
     });
 
-    this.socket.on('end', () => {
+    socket.on('end', () => {
       console.log('disconnected from java server');
       setTimeout(connect, RETRY_INTERVAL);
     })
