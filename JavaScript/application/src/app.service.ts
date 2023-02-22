@@ -17,55 +17,63 @@ export class FingerPrintService {
   private socket: net.Socket;
   constructor() {
     console.log('FingerPrint Service.');
+    const RETRY_INTERVAL = 5000;
 
-    // this.socket = new net.Socket();
-    // this.socket.connect(8080, 'localhost', () => {
-    //   console.log('Connected to Java server');
-    //   // const file = fsp.readFile("fpTemplate.json", 'utf-8');
-    //   let file = fs.readFileSync('fpTemplate.json', {
-    //     encoding: 'utf8',
-    //   });
-    //   if (file.length != 0) {
-    //     console.log(JSON.parse(file));
-    //     this.socket.write(file.toString());
-    //   }
-    //   else {
-    //     console.log("File is empty");
-    //     this.socket.write(file.toString());
-    //   }
+    this.socket = new net.Socket();
+    function connect() {
+      this.socket.connect(8080, 'localhost', () => {
+        console.log('Connected to Java server');
+        // const file = fsp.readFile("fpTemplate.json", 'utf-8');
+        let file = fs.readFileSync('fpTemplate.json', {
+          encoding: 'utf8',
+        });
+        if (file.length != 0) {
+          console.log(JSON.parse(file));
+          this.socket.write(file.toString());
+        }
+        else {
+          console.log("File is empty");
+          this.socket.write(file.toString());
+        }
+      });
+    }
 
-    // });
-    // this.socket.on('data', (serverdata) => {
-    //   console.log(`Message from Java server: ${serverdata.toString().slice(2)}`);
-    //   let filedata = fs.readFileSync('fpTemplate.json', {
-    //     encoding: 'utf8',
-    //   });
-    //   if (serverdata.toString().includes("Register")) {
-    //     if (filedata.length != 0) {
-    //       let fpdata = JSON.parse(filedata.toString());
-    //       let serverDataObj = JSON.parse(serverdata.toString().slice(2));
-    //       let newdata = JSON.stringify(serverDataObj['Register']);
-    //       let newdatajson = JSON.parse(newdata);
-    //       fpdata['Register'].push(newdatajson[0]);
-    //       console.log("after push: ", fpdata);
-    //       fsp.writeFile("fpTemplate.json", JSON.stringify(fpdata));
-    //       console.log('save success');
-    //     }
-    //     else {
-    //       fsp.writeFile("fpTemplate.json", serverdata.toString().slice(2));
-    //       console.log('save success');
-    //     }
-    //   }
-    //   else {
-    //     console.log('Message from Java server: ', JSON.parse(serverdata.toString().slice(2)));
-    //   }
+    this.socket.on('data', (serverdata) => {
+      console.log(`Message from Java server: ${serverdata.toString().slice(2)}`);
+      let filedata = fs.readFileSync('fpTemplate.json', {
+        encoding: 'utf8',
+      });
+      if (serverdata.toString().includes("Register")) {
+        if (filedata.length != 0) {
+          let fpdata = JSON.parse(filedata.toString());
+          let serverDataObj = JSON.parse(serverdata.toString().slice(2));
+          let newdata = JSON.stringify(serverDataObj['Register']);
+          let newdatajson = JSON.parse(newdata);
+          fpdata['Register'].push(newdatajson[0]);
+          console.log("after push: ", fpdata);
+          fsp.writeFile("fpTemplate.json", JSON.stringify(fpdata));
+          console.log('save success');
+        }
+        else {
+          fsp.writeFile("fpTemplate.json", serverdata.toString().slice(2));
+          console.log('save success');
+        }
+      }
+      else {
+        fsp.writeFile("message.json", serverdata.toString().slice(2));
+        console.log('Message from Java server: ', JSON.parse(serverdata.toString().slice(2)));
+      }
+    });
 
+    this.socket.on('error', (err) => {
+      console.error(`Socket error: ${err.message}`);
+      // setTimeout(connect, RETRY_INTERVAL);
+    });
 
-
-    // });
-    // this.socket.on('end', () => {
-    //   console.log('disconnected from server')
-    // })
+    this.socket.on('end', () => {
+      console.log('disconnected from java server');
+      setTimeout(connect, RETRY_INTERVAL);
+    })
 
   }
 

@@ -44,7 +44,17 @@ export class AppController {
     //   }
     // });
   }
-
+  @Get('message')
+  getMessage(@Req() req, @Res() res): string {
+    const jadeargument: any = {};
+    // console.log(JSON.stringify(fptemp));
+    let data = fs.readFileSync('message.json', {
+      encoding: 'utf8',
+    });
+    let msg = JSON.parse(data);
+    jadeargument['message'] = msg['Notification'];
+    return res.send(res_render('message', res, jadeargument));
+  }
 
   @Get('status')
   getStatus(@Req() req, @Res() res): string {
@@ -97,7 +107,6 @@ export function res_render(jadefile: any, res: any, jadeargument: any) {
 
   return html;
 }
-
 
 
 
