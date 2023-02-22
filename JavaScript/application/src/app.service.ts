@@ -60,8 +60,23 @@ export class FingerPrintService {
         }
       }
       else {
-        fsp.writeFile("message.json", serverdata.toString().slice(2));
-        console.log('Message from Java server: ', JSON.parse(serverdata.toString().slice(2)));
+        let messageData = fs.readFileSync('message.json', {
+          encoding: 'utf8',
+        });
+        if (messageData.length != 0) {
+          let fpdata = JSON.parse(messageData.toString());
+          let serverDataObj = JSON.parse(serverdata.toString().slice(2));
+          let newdata = JSON.stringify(serverDataObj['Notification']);
+          let newdatajson = JSON.parse(newdata);
+          fpdata['Notification'].push(newdatajson[0]);
+          fsp.writeFile("message.json", JSON.stringify(fpdata));
+          console.log('save success');
+        }
+        else {
+          fsp.writeFile("message.json", serverdata.toString().slice(2));
+          console.log('Message from Java server: ', JSON.parse(serverdata.toString().slice(2)));
+        }
+
       }
     });
 
@@ -76,14 +91,6 @@ export class FingerPrintService {
     })
 
   }
-
-
-  fingerprint = [
-    {
-      name: 'userone',
-      fingerprintTemplate: 'test',
-    }
-  ]
 
   getHello(): string {
     return 'Test';
