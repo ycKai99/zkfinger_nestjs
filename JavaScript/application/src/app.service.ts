@@ -40,16 +40,19 @@ export class FingerPrintService {
       let filedata = fs.readFileSync('fpTemplate.json', {
         encoding: 'utf8',
       });
-      if (serverdata.toString().includes("False")) {
-        let filejson = JSON.parse(filedata);
-        for (let i = 1; i < filejson['Register'].length; i++) {
+      let filejson = JSON.parse(filedata);
+
+      for (let i = 1; i < filejson['Register'].length; i++) {
+        if (serverdata.toString().includes("False")) {
           socket.write(filejson['Register'][i].fingerprintTemplate);
           console.log("Not match");
         }
+        else {
+          console.log('match');
+          return;
+        }
       }
-      else {
-        console.log('match');
-      }
+
 
       // if (serverdata.toString().includes("Register")) {
       //   if (filedata.length != 0) {
