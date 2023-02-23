@@ -1,16 +1,11 @@
 import { Injectable, Req, StreamableFile } from '@nestjs/common';
 import { Body, Get, Res } from '@nestjs/common/decorators';
-import { Post } from '@nestjs/common/decorators';
-import { Request } from 'express';
-import { GetJsonFunction } from './app.dto';
 import { GetFpFunction } from './fp.dto';
-import { createReadStream } from 'fs';
-import { join } from 'path';
-import { Socket, Manager } from 'socket.io-client';
 const fs = require("graceful-fs");
 const fsp = require('fs/promises');
-const io = require('socket.io-client');
 import * as net from 'net';
+import { check } from 'prettier';
+import { createServer } from 'net';
 
 @Injectable()
 export class FingerPrintService {
@@ -28,8 +23,10 @@ export class FingerPrintService {
           encoding: 'utf8',
         });
         if (file.length != 0) {
+          let filejson = JSON.parse(file);
+          let fpTemplate = filejson['Register'][0].fingerprintTemplate;
           console.log(JSON.parse(file));
-          socket.write(file.toString());
+          socket.write(fpTemplate);
         }
         else {
           console.log("File is empty");
@@ -39,45 +36,56 @@ export class FingerPrintService {
     }
 
     socket.on('data', (serverdata) => {
-      console.log(`Message from Java server: ${serverdata.toString().slice(2)}`);
+      console.log(`Message from Java server: ${serverdata.toString()}`);
       let filedata = fs.readFileSync('fpTemplate.json', {
         encoding: 'utf8',
       });
-      if (serverdata.toString().includes("Register")) {
-        if (filedata.length != 0) {
-          let fpdata = JSON.parse(filedata.toString());
-          let serverDataObj = JSON.parse(serverdata.toString().slice(2));
-          let newdata = JSON.stringify(serverDataObj['Register']);
-          let newdatajson = JSON.parse(newdata);
-          fpdata['Register'].push(newdatajson[0]);
-          console.log("after push: ", fpdata);
-          fsp.writeFile("fpTemplate.json", JSON.stringify(fpdata));
-          console.log('save success');
-        }
-        else {
-          fsp.writeFile("fpTemplate.json", serverdata.toString().slice(2));
-          console.log('save success');
+      if (serverdata.toString().includes("False")) {
+        let filejson = JSON.parse(filedata);
+        for (let i = 1; i < filejson['Register'].length; i++) {
+          socket.write(filejson['Register'][i].fingerprintTemplate);
+          console.log("Not match");
         }
       }
       else {
-        let messageData = fs.readFileSync('message.json', {
-          encoding: 'utf8',
-        });
-        if (messageData.length != 0) {
-          let fpdata = JSON.parse(messageData.toString());
-          let serverDataObj = JSON.parse(serverdata.toString().slice(2));
-          let newdata = JSON.stringify(serverDataObj['Notification']);
-          let newdatajson = JSON.parse(newdata);
-          fpdata['Notification'].push(newdatajson[0]);
-          fsp.writeFile("message.json", JSON.stringify(fpdata));
-          console.log('save success');
-        }
-        else {
-          fsp.writeFile("message.json", serverdata.toString().slice(2));
-          console.log('Message from Java server: ', JSON.parse(serverdata.toString().slice(2)));
-        }
-
+        console.log('match');
       }
+
+      // if (serverdata.toString().includes("Register")) {
+      //   if (filedata.length != 0) {
+      //     let fpdata = JSON.parse(filedata.toString());
+      //     let serverDataObj = JSON.parse(serverdata.toString().slice(2));
+      //     let newdata = JSON.stringify(serverDataObj['Register']);
+      //     let newdatajson = JSON.parse(newdata);
+      //     fpdata['Register'].push(newdatajson[0]);
+      //     console.log("after push: ", fpdata);
+      //     fsp.writeFile("fpTemplate.json", JSON.stringify(fpdata));
+      //     console.log('save success');
+      //   }
+      //   else {
+      //     fsp.writeFile("fpTemplate.json", serverdata.toString().slice(2));
+      //     console.log('save success');
+      //   }
+      // }
+      // else {
+      //   let messageData = fs.readFileSync('message.json', {
+      //     encoding: 'utf8',
+      //   });
+      //   if (messageData.length != 0) {
+      //     let fpdata = JSON.parse(messageData.toString());
+      //     let serverDataObj = JSON.parse(serverdata.toString().slice(2));
+      //     let newdata = JSON.stringify(serverDataObj['Notification']);
+      //     let newdatajson = JSON.parse(newdata);
+      //     fpdata['Notification'].push(newdatajson[0]);
+      //     fsp.writeFile("message.json", JSON.stringify(fpdata));
+      //     console.log('save success');
+      //   }
+      //   else {
+      //     fsp.writeFile("message.json", serverdata.toString().slice(2));
+      //     console.log('Message from Java server: ', JSON.parse(serverdata.toString().slice(2)));
+      //   }
+
+      // }
     });
 
     socket.on('error', (err) => {
@@ -90,35 +98,33 @@ export class FingerPrintService {
       setTimeout(connect, RETRY_INTERVAL);
     })
 
-  }
-
-  getHello(): string {
-    return 'Test';
-  }
-
-  getfp(@Res({ passthrough: true }) res: Response): StreamableFile {
-    //const file = createReadStream(join(process.cwd(), 'fpTemplate.json'));
-    //return new StreamableFile(file);
-    const file = fsp.readFile("fpTemplate.json", 'utf-8');
-    if (file.toString() != null) {
-      console.log("File is not empty");
-    }
-    else {
-      console.log("File is empty");
-    }
-    // var fp_json = JSON.stringify(file);
-    console.log('fingerprint get');
-
-    // const obj = JSON.stringify(fsp.readFile("fpTemplate.json", 'utf-8'));
-    return file;
-  }
 
 
-  savefp(fpLength: GetFpFunction): string {
-    // fsp.writeFile("fpTemplate.json", JSON.stringify(fpLength));
-    //fs.writeFile("fpTemplate.json", JSON.stringify(fpLength));
-    console.log(fpLength.toString());
-    return "Nestjs save success";
+
+    // const server = createServer(socket => {
+    //   let message = fs.readFileSync('message.json', {
+    //     encoding: 'utf8',
+    //   });
+    //   let fpData = fs.readFileSync('fpTemplate.json', {
+    //     encoding: 'utf8',
+    //   });
+
+    //   socket.write(message.toString());
+    // });
+
+    // server.listen(3010, () => {
+    //   console.log('Server listening on port 3010');
+    // });
+
+    // server.on('connection', (stream) => {
+    //   console.log('Client connected');
+
+    //   stream.on('data', (data) => {
+    //     console.log('Received data from client: ', data.toString());
+    //   });
+    // });
+
+
   }
 
 }
