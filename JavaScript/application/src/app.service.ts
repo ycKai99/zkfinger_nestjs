@@ -12,8 +12,9 @@ export class FingerPrintService {
   private socket: net.Socket;
   constructor() {
     console.log('FingerPrint Service.');
-    const RETRY_INTERVAL = 5000;
 
+
+    const RETRY_INTERVAL = 5000;
     let socket = new net.Socket();
     setTimeout(connect, 1000);
     function connect() {
@@ -26,11 +27,11 @@ export class FingerPrintService {
           let filejson = JSON.parse(file);
           let fpTemplate = filejson['Register'][0].fingerprintTemplate;
           console.log(JSON.parse(file));
-          socket.write(fpTemplate);
+          // socket.write(fpTemplate);
         }
         else {
           console.log("File is empty");
-          socket.write(file.toString());
+          // socket.write(file.toString());
         }
       });
     }
@@ -41,18 +42,22 @@ export class FingerPrintService {
         encoding: 'utf8',
       });
       let filejson = JSON.parse(filedata);
-
-      for (let i = 1; i < filejson['Register'].length; i++) {
-        if (serverdata.toString().includes("False")) {
-          socket.write(filejson['Register'][i].fingerprintTemplate);
-          console.log("Not match");
-        }
-        else {
-          console.log('match');
-          return;
-        }
+      if (serverdata.toString().includes('match')) {
+        socket.write('continue');
       }
-
+      else {
+        socket.write('finish');
+      }
+      // for (let i = 1; i < filejson['Register'].length; i++) {
+      //   if (serverdata.toString().includes("False")) {
+      //     socket.write(filejson['Register'][i].fingerprintTemplate);
+      //     console.log("Not match");
+      //   }
+      //   else {
+      //     console.log('match');
+      //     return;
+      //   }
+      // }
 
       // if (serverdata.toString().includes("Register")) {
       //   if (filedata.length != 0) {
@@ -62,7 +67,7 @@ export class FingerPrintService {
       //     let newdatajson = JSON.parse(newdata);
       //     fpdata['Register'].push(newdatajson[0]);
       //     console.log("after push: ", fpdata);
-      //     fsp.writeFile("fpTemplate.json", JSON.stringify(fpdata));
+      //     // fsp.writeFile("fpTemplate.json", JSON.stringify(fpdata));
       //     console.log('save success');
       //   }
       //   else {
